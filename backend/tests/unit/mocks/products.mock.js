@@ -14,7 +14,25 @@ const product01 = {
   name: 'Martelo de Thor',
 };
 
+const allProductsFromController = {
+  status: 200,
+  data: allProducts,
+};
+
+const productIdFromController = {
+  status: 200,
+  data: product01,
+};
+
+const productIdFromControllerError = {
+  status: 404,
+  message: 'Product not found',
+};
+
 module.exports = {
   allProducts,
   product01,
+  allProductsFromController,
+  productIdFromController,
+  productIdFromControllerError,
 };
