@@ -1,12 +1,12 @@
-const { productModel } = require('../models');
+const { productsModel } = require('../models');
 
 const findAll = async () => {
-  const products = await productModel.findAll();
+  const products = await productsModel.findAll();
   return { status: 'SUCCESSFUL', data: products };
 };
 
 const findById = async (productId) => {
-  const product = await productModel.findById(productId);
+  const product = await productsModel.findById(productId);
   if (product) {
     return { status: 'SUCCESSFUL', data: product };
   }
