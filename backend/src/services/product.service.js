@@ -2,10 +2,7 @@ const { productModel } = require('../models');
 
 const findAll = async () => {
   const products = await productModel.findAll();
-  if (products) {
-    return { status: 'SUCCESSFUL', data: products };
-  }
-  return { status: 'NOT_FOUND', message: 'Products not found' };
+  return { status: 'SUCCESSFUL', data: products };
 };
 
 const findById = async (productId) => {
