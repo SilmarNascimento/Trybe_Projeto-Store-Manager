@@ -16,9 +16,7 @@ const findById = async (productId) => {
 
 const insert = async (data) => {
   const columns = formattedColumns(data);
-  console.log(columns);
   const placeholder = formattedPlaceholders(data);
-  console.log(placeholder);
   const query = `INSERT INTO StoreManager.products (${columns}) VALUES (${placeholder});`;
   const [{ insertId }] = await connection.execute(query, [...Object.values(data)]);
   return insertId;
