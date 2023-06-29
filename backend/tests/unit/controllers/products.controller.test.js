@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProductsFromController } = require('../mocks/products.mock');
+const { allProductsFromController, productIdFromController, productIdFromControllerError } = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsController } = require('../../../src/controllers');
 
@@ -20,9 +20,41 @@ describe('Realize testes unitários para productsControler', function () {
     await productsController.getAllProducts(request, response);
 
     expect(response.status).to.have.been.calledWith(200);
-    expect(response.json).to.have.been.calledWith(allProductsFromController);
+    expect(response.json).to.have.been.calledWith(allProductsFromController.data);
+  });
 
-    expect(response).to.be.an('object');
+  it('Verifica o retorno correto do método getProductsById', async function () {
+    sinon.stub(productsService, 'findById').resolves(productIdFromController);
+    const request = {
+      params: { id: 1 },
+    };
+    const response = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
+    await productsController.getProductById(request, response);
+
+    expect(response.status).to.have.been.calledWith(200);
+    expect(response.json).to.have.been.calledWith(productIdFromController.data);
+  });
+
+  it('Verifica o retorno inválido do método getProductsById', async function () {
+    sinon.stub(productsService, 'findById').resolves(productIdFromControllerError);
+    const request = {
+      params: { id: 15 },
+    };
+    const response = {
+      status: sinon.stub().returnsThis(),
+      json: sinon.stub(),
+    };
+
+    console.log(productIdFromControllerError);
+    await productsController.getProductById(request, response);
+    console.log(response);
+
+    expect(response.status).to.have.been.calledWith(404);
+    expect(response.json).to.have.been.calledWith({ message: productIdFromControllerError.message });
   });
 
   afterEach(function () {

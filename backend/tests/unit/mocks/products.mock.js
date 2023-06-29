@@ -15,17 +15,17 @@ const product01 = {
 };
 
 const allProductsFromController = {
-  status: 200,
+  status: 'SUCCESSFUL',
   data: allProducts,
 };
 
 const productIdFromController = {
-  status: 200,
+  status: 'SUCCESSFUL',
   data: product01,
 };
 
 const productIdFromControllerError = {
-  status: 404,
+  status: 'NOT_FOUND',
   message: 'Product not found',
 };
 
