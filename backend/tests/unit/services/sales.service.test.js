@@ -30,9 +30,10 @@ describe('Realize testes unitários para salesService', function () {
   });
 
   it('Verifica o retorno do método findById com id inexistente', async function () {
-    sinon.stub(salesModel, 'findById').resolves(undefined);
+    sinon.stub(salesModel, 'findById').resolves([]);
 
     const response = await salesService.findById(15);
+    console.log(response);
 
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal('NOT_FOUND');

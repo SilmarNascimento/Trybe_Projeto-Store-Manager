@@ -5,16 +5,16 @@ const findAll = async () => {
   return { status: 'SUCCESSFUL', data: products };
 };
 
-const findById = async (productId) => {
-  const product = await salesModel.findById(productId);
-  if (product) {
-    const saleInformation = product.map((item) => {
-      const { saleId, ...data } = item;
-      return data;
-    });
-    return { status: 'SUCCESSFUL', data: saleInformation };
+const findById = async (id) => {
+  const product = await salesModel.findById(id);
+  if (!product.length) {
+    return { status: 'NOT_FOUND', message: 'Sale not found' };
   }
-  return { status: 'NOT_FOUND', message: 'Sale not found' };
+  const saleInformation = product.map((item) => {
+    const { saleId, ...data } = item;
+    return data;
+  });
+  return { status: 'SUCCESSFUL', data: saleInformation };
 };
 
 module.exports = {

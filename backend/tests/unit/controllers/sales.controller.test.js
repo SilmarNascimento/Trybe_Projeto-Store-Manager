@@ -1,30 +1,34 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProductsFromController, productIdFromController, productIdFromControllerError } = require('../mocks/products.mock');
-const { productsService } = require('../../../src/services');
-const { productsController } = require('../../../src/controllers');
+const {
+  allSalesFromController,
+  saleIdFromController,
+  saleIdFromControllerError,
+} = require('../mocks/sales.mock');
+const { salesService } = require('../../../src/services');
+const { salesController } = require('../../../src/controllers');
 
 const { expect } = chai;
 chai.use(sinonChai);
 
-describe('Realize testes unitários para productsControler', function () {
-  it('Verifica o retorno do método getAllProducts', async function () {
-    sinon.stub(productsService, 'findAll').resolves(allProductsFromController);
+describe('Realize testes unitários para salesControler', function () {
+  it('Verifica o retorno do método getAllSales', async function () {
+    sinon.stub(salesService, 'findAll').resolves(allSalesFromController);
     const request = {};
     const response = {
       status: sinon.stub().returnsThis(),
       json: sinon.stub(),
     };
 
-    await productsController.getAllProducts(request, response);
+    await salesController.getAllSales(request, response);
 
     expect(response.status).to.have.been.calledWith(200);
-    expect(response.json).to.have.been.calledWith(allProductsFromController.data);
+    expect(response.json).to.have.been.calledWith(allSalesFromController.data);
   });
 
-  it('Verifica o retorno correto do método getProductsById', async function () {
-    sinon.stub(productsService, 'findById').resolves(productIdFromController);
+  it('Verifica o retorno correto do método getSalesById', async function () {
+    sinon.stub(salesService, 'findById').resolves(saleIdFromController);
     const request = {
       params: { id: 1 },
     };
@@ -33,14 +37,14 @@ describe('Realize testes unitários para productsControler', function () {
       json: sinon.stub(),
     };
 
-    await productsController.getProductById(request, response);
+    await salesController.getSalesById(request, response);
 
     expect(response.status).to.have.been.calledWith(200);
-    expect(response.json).to.have.been.calledWith(productIdFromController.data);
+    expect(response.json).to.have.been.calledWith(saleIdFromController.data);
   });
 
-  it('Verifica o retorno inválido do método getProductsById', async function () {
-    sinon.stub(productsService, 'findById').resolves(productIdFromControllerError);
+  it('Verifica o retorno inválido do método getSalesById', async function () {
+    sinon.stub(salesService, 'findById').resolves(saleIdFromControllerError);
     const request = {
       params: { id: 15 },
     };
@@ -49,10 +53,10 @@ describe('Realize testes unitários para productsControler', function () {
       json: sinon.stub(),
     };
 
-    await productsController.getProductById(request, response);
+    await salesController.getSalesById(request, response);
 
     expect(response.status).to.have.been.calledWith(404);
-    expect(response.json).to.have.been.calledWith({ message: productIdFromControllerError.message });
+    expect(response.json).to.have.been.calledWith({ message: saleIdFromControllerError.message });
   });
 
   afterEach(function () {
