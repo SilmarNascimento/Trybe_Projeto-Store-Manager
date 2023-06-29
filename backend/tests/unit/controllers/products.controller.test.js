@@ -49,9 +49,7 @@ describe('Realize testes unitários para productsControler', function () {
       json: sinon.stub(),
     };
 
-    console.log(productIdFromControllerError);
     await productsController.getProductById(request, response);
-    console.log(response);
 
     expect(response.status).to.have.been.calledWith(404);
     expect(response.json).to.have.been.calledWith({ message: productIdFromControllerError.message });
