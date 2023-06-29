@@ -33,7 +33,6 @@ describe('Realize testes unitários para salesService', function () {
     sinon.stub(salesModel, 'findById').resolves([]);
 
     const response = await salesService.findById(15);
-    console.log(response);
 
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal('NOT_FOUND');
