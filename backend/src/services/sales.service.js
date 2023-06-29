@@ -7,11 +7,11 @@ const findAll = async () => {
 
 const findById = async (productId) => {
   const product = await salesModel.findById(productId);
-  const saleInformation = product.map((item) => {
-    const { saleId, ...data } = item;
-    return data;
-  });
   if (product) {
+    const saleInformation = product.map((item) => {
+      const { saleId, ...data } = item;
+      return data;
+    });
     return { status: 'SUCCESSFUL', data: saleInformation };
   }
   return { status: 'NOT_FOUND', message: 'Sale not found' };
