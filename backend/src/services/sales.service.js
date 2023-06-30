@@ -17,7 +17,12 @@ const findById = async (id) => {
   return { status: 'SUCCESSFUL', data: saleInformation };
 };
 
+const insert = async () => {
+
+};
+
 module.exports = {
   findAll,
   findById,
+  insert,
 };

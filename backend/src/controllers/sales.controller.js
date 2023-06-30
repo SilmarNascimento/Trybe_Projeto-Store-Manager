@@ -15,7 +15,17 @@ const getSalesById = async (request, response, _next) => {
   return response.status(mapStatus(status)).json(data);
 };
 
+const addSales = async (request, response, _next) => {
+  const salesInformation = request.body;
+  const { status, data, message } = await salesService.insert(salesInformation);
+  if (!data) {
+    return response.status(mapStatus(status)).json({ message });
+  }
+  return response.status(mapStatus(status)).json(data);
+};
+
 module.exports = {
   getAllSales,
   getSalesById,
+  addSales,
 };

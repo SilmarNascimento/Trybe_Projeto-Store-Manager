@@ -23,7 +23,12 @@ const findById = async (productId) => {
   return product;
 };
 
+const insert = async () => {
+
+};
+
 module.exports = {
   findAll,
   findById,
+  insert,
 };
