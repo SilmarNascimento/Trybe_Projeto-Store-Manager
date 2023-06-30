@@ -18,6 +18,8 @@ const {
   reqSalesInvalidProductId01,
   reqSalesInvalidProductId02,
   invalidValueResponseErrorProduct,
+  insertResponse,
+  requestSalesBody,
 } = require('../mocks/sales.mock');
 const { salesService } = require('../../../src/services');
 const { salesModel } = require('../../../src/models');
@@ -135,7 +137,7 @@ describe('Realize testes unitários para salesService', function () {
     expect(response.message).to.be.deep.equal(invalidValueResponseErrorProduct.message);
   });
 
-  /* it('Verifica todas as validações: productId não cadastrado test2', async function () {
+  it('Verifica todas as validações: productId não cadastrado test2', async function () {
     sinon.stub(salesModel, 'findById')
       .onFirstCall()
       .resolves(sale01)
@@ -147,18 +149,27 @@ describe('Realize testes unitários para salesService', function () {
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal(invalidValueResponseErrorProduct.status);
     expect(response.message).to.be.deep.equal(invalidValueResponseErrorProduct.message);
-  }); */
+  });
 
-  /* reqSalesWithoutId01,
-  reqSalesWithoutId02,
-  reqSalesWithoutQuantity01,
-  reqSalesWithoutQuantity02,
-  reqSalesNullQuantity01,
-  reqSalesNullQuantity02,
-  reqSalesNegativeQuantity01,
-  reqSalesNegativeQuantity02,
-  reqSalesInvalidProductId01,
-  reqSalesInvalidProductId02, */
+  it('Verifica se ao registrar uma venda válida a camada service responde corretamente', async function () {
+    const [{ insertId }] = insertResponse;
+    const registeredSale = {
+      id: insertId,
+      itemsSold: requestSalesBody,
+    };
+    sinon.stub(salesModel, 'findById')
+      .onFirstCall()
+      .resolves(sale01)
+      .onSecondCall()
+      .resolves(sale01);
+    sinon.stub(salesModel, 'insert').resolves(insertId);
+
+    const response = await salesService.insert(requestSalesBody);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('CREATED');
+    expect(response.data).to.be.deep.equal(registeredSale);
+  });
 
   afterEach(function () {
     sinon.restore();

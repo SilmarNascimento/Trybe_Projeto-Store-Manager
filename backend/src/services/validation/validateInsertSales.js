@@ -17,16 +17,14 @@ const validateSales = (array) => {
 
 const validateProductId = async (array) => {
   let registerError = [];
-  array.forEach(async (saleObject) => {
-    console.log('objeto para validação', saleObject);
+  const promises = array.map(async (saleObject) => {
     const { productId } = saleObject;
     const product = await salesModel.findById(productId);
-    console.log('resposta do findById', product);
     if (!product.length) {
       registerError = [...registerError, { status: 'NOT_FOUND', message: 'Product not found' }];
     }
   });
-  console.log('registro dos erros', registerError);
+  await Promise.all(promises);
   return registerError;
 };
 

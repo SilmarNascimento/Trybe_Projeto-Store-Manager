@@ -19,7 +19,6 @@ const findById = async (id) => {
 };
 
 const insert = async (salesInformation) => {
-  console.log(salesInformation);
   const errorResponse = validateSales(salesInformation);
   if (errorResponse.length) {
     const { status, message } = errorResponse[0];
