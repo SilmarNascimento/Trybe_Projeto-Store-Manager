@@ -19,6 +19,7 @@ const findById = async (id) => {
 };
 
 const insert = async (salesInformation) => {
+  console.log(salesInformation);
   const errorResponse = validateSales(salesInformation);
   if (errorResponse.length) {
     const { status, message } = errorResponse[0];
@@ -30,6 +31,9 @@ const insert = async (salesInformation) => {
     return { status, message };
   }
   // funcção para chamar a inserção no banco de dados
+  const id = await salesModel.insert(salesInformation);
+  const data = { id, itemsSold: salesInformation };
+  return { status: 'CREATED', data };
 };
 
 module.exports = {

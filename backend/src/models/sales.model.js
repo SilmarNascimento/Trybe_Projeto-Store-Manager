@@ -28,15 +28,14 @@ const insert = async (salesArray) => {
   const db = 'StoreManager';
   const query = `INSERT INTO ${db}.sales (date) VALUES (now());`;
   const [{ insertId }] = await connection.execute(query);
-  const [affectedRows] = salesArray.map(async (sale) => {
+  salesArray.forEach(async (sale) => {
     const tableLabel = { saleId: insertId, ...sale };
     const columns = formattedColumns(tableLabel);
     const placeholder = formattedPlaceholders(tableLabel);
     const saleQuery = `INSERT INTO ${db}.sales_products (${columns}) VALUES (${placeholder});`;
-    const [responseObj] = await connection.execute(saleQuery, [insertId, ...Object.values(sale)]);
-    return responseObj.insertId;
+    await connection.execute(saleQuery, [insertId, ...Object.values(sale)]);
   });
-  console.log(affectedRows);
+  return insertId;
 };
 
 module.exports = {
