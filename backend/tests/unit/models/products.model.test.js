@@ -2,7 +2,12 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const connection = require('../../../src/models/connection');
-const { allProducts, product01 } = require('../mocks/products.mock');
+const {
+  allProducts,
+  product01,
+  insertProductResponse,
+  newProduct,
+} = require('../mocks/products.mock');
 const { productsModel } = require('../../../src/models');
 
 const { expect } = chai;
@@ -25,6 +30,15 @@ describe('Realiza testes unitários para productsModel', function () {
     
     expect(response).to.be.an('object');
     expect(response).to.be.deep.equal(product01);
+  });
+
+  it('Verifica se o método insert retorna o valor esperado', async function () {
+    sinon.stub(connection, 'execute').resolves(insertProductResponse);
+
+    const response = await productsModel.insert(newProduct);
+
+    expect(response).to.be.an('number');
+    expect(response).to.be.equal(4);
   });
 
   afterEach(function () {

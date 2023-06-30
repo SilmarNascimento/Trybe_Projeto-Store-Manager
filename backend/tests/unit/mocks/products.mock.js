@@ -1,3 +1,4 @@
+// Model Mocks
 const allProducts = [
   {
     id: 1,
@@ -14,6 +15,16 @@ const product01 = {
   name: 'Martelo de Thor',
 };
 
+// Service Mocks
+const insertProductResponse = [{
+  insertId: 4,
+}];
+
+const newProduct = {
+  name: 'Chackran da Xena',
+};
+
+// Controller Mocks
 const allProductsFromController = {
   status: 'SUCCESSFUL',
   data: allProducts,
@@ -29,10 +40,24 @@ const productIdFromControllerError = {
   message: 'Product not found',
 };
 
+const insertProductFromService = {
+  status: 'CREATED',
+  data: newProduct,
+};
+
+const insertProductFromServiceError = {
+  status: 'INVALID_VALUE',
+  message: '"name" is required',
+};
+
 module.exports = {
   allProducts,
   product01,
+  insertProductResponse,
+  newProduct,
   allProductsFromController,
   productIdFromController,
   productIdFromControllerError,
+  insertProductFromService,
+  insertProductFromServiceError,
 };

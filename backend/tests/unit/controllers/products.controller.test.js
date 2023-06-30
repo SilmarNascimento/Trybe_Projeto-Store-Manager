@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProductsFromController, productIdFromController, productIdFromControllerError } = require('../mocks/products.mock');
+const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError } = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsController } = require('../../../src/controllers');
 
@@ -9,13 +9,14 @@ const { expect } = chai;
 chai.use(sinonChai);
 
 describe('Realize testes unitários para productsControler', function () {
+  const response = {
+    status: sinon.stub().returnsThis(),
+    json: sinon.stub(),
+  };
+
   it('Verifica o retorno do método getAllProducts', async function () {
     sinon.stub(productsService, 'findAll').resolves(allProductsFromController);
     const request = {};
-    const response = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
 
     await productsController.getAllProducts(request, response);
 
@@ -27,10 +28,6 @@ describe('Realize testes unitários para productsControler', function () {
     sinon.stub(productsService, 'findById').resolves(productIdFromController);
     const request = {
       params: { id: 1 },
-    };
-    const response = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
     };
 
     await productsController.getProductById(request, response);
@@ -44,15 +41,37 @@ describe('Realize testes unitários para productsControler', function () {
     const request = {
       params: { id: 15 },
     };
-    const response = {
-      status: sinon.stub().returnsThis(),
-      json: sinon.stub(),
-    };
 
     await productsController.getProductById(request, response);
 
     expect(response.status).to.have.been.calledWith(404);
     expect(response.json).to.have.been.calledWith({ message: productIdFromControllerError.message });
+  });
+
+  it('Verifica o retorno válido do método addProduct', async function () {
+    sinon.stub(productsService, 'insert').resolves(insertProductFromService);
+    const request = {
+      body: newProduct,
+    };
+
+    await productsController.addProduct(request, response);
+
+    expect(response.status).to.have.been.calledWith(201);
+    expect(response.json).to.have.been.calledWith(insertProductFromService.data);
+  });
+
+  it('Verifica o retorno inválido do método addProduct', async function () {
+    sinon.stub(productsService, 'insert').resolves(insertProductFromServiceError);
+    const request = {
+      body: {
+        nome: 'Chackran da Xena',
+      },
+    };
+
+    await productsController.addProduct(request, response);
+
+    expect(response.status).to.have.been.calledWith(422);
+    expect(response.json).to.have.been.calledWith({ message: insertProductFromServiceError.message });
   });
 
   afterEach(function () {

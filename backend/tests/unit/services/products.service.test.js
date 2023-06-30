@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProducts, product01 } = require('../mocks/products.mock');
+const { allProducts, product01, insertProductResponse, newProduct } = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsModel } = require('../../../src/models');
 
@@ -38,6 +38,29 @@ describe('Realize testes unitários para productsService', function () {
     expect(response.status).to.be.equal('NOT_FOUND');
     expect(response.data).to.be.deep.equal(undefined);
     expect(response.message).to.be.deep.equal('Product not found');
+  });
+
+  it('Verifica o retorno do método insert com dados válidos', async function () {
+    const { insertId } = insertProductResponse[0];
+    const responseBody = { insertId, ...newProduct };
+    sinon.stub(productsModel, 'insert').resolves(insertId);
+
+    const response = await productsService.insert(newProduct);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('CREATED');
+    expect(response.data).to.be.deep.equal(responseBody);
+  });
+
+  it('Verifica o retorno do método insert com dados inválidos', async function () {
+    const { insertId } = insertProductResponse[0];
+    sinon.stub(productsModel, 'insert').resolves(insertId);
+
+    const response = await productsService.insert({ nome: 'Chackran da Xena' });
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('INVALID_VALUE');
+    expect(response.message).to.be.deep.equal('"name" is required');
   });
 
   afterEach(function () {

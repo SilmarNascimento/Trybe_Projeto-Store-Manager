@@ -15,9 +15,9 @@ const findById = async (productId) => {
 };
 
 const insert = async (data) => {
-  const isValid = validateProduct(data);
-  if (isValid) {
-    return { status: isValid.status, message: isValid.message };
+  const isInvalid = validateProduct(data);
+  if (isInvalid) {
+    return { status: isInvalid.status, message: isInvalid.message };
   }
   const insertId = await productsModel.insert(data);
   const newProduct = { insertId, ...data };
