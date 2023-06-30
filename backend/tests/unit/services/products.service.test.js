@@ -52,15 +52,26 @@ describe('Realize testes unitários para productsService', function () {
     expect(response.data).to.be.deep.equal(responseBody);
   });
 
-  it('Verifica o retorno do método insert com dados inválidos', async function () {
+  it('Verifica o retorno do método insert com chaves inválidas', async function () {
     const { insertId: id } = insertProductResponse[0];
     sinon.stub(productsModel, 'insert').resolves(id);
 
     const response = await productsService.insert({ nome: 'Chackran da Xena' });
 
     expect(response).to.be.an('object');
-    expect(response.status).to.be.equal('INVALID_VALUE');
+    expect(response.status).to.be.equal('BAD_REQUEST');
     expect(response.message).to.be.deep.equal('"name" is required');
+  });
+
+  it('Verifica o retorno do método insert com dados inválidos', async function () {
+    const { insertId: id } = insertProductResponse[0];
+    sinon.stub(productsModel, 'insert').resolves(id);
+
+    const response = await productsService.insert({ name: 'Xena' });
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('INVALID_VALUE');
+    expect(response.message).to.be.deep.equal('"name" length must be at least 5 characters long');
   });
 
   afterEach(function () {

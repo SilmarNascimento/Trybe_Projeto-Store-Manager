@@ -46,8 +46,13 @@ const insertProductFromService = {
 };
 
 const insertProductFromServiceError = {
-  status: 'INVALID_VALUE',
+  status: 'BAD_REQUEST',
   message: '"name" is required',
+};
+
+const insertInvalidNameFromServiveError = {
+  status: 'INVALID_VALUE',
+  message: '"name" length must be at least 5 characters long',
 };
 
 module.exports = {
@@ -60,4 +65,5 @@ module.exports = {
   productIdFromControllerError,
   insertProductFromService,
   insertProductFromServiceError,
+  insertInvalidNameFromServiveError,
 };

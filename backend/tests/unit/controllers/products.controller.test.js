@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError } = require('../mocks/products.mock');
+const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError, insertInvalidNameFromServiveError } = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsController } = require('../../../src/controllers');
 
@@ -70,8 +70,22 @@ describe('Realize testes unitários para productsControler', function () {
 
     await productsController.addProduct(request, response);
 
-    expect(response.status).to.have.been.calledWith(422);
+    expect(response.status).to.have.been.calledWith(400);
     expect(response.json).to.have.been.calledWith({ message: insertProductFromServiceError.message });
+  });
+
+  it('Verifica o retorno inválido do método addProduct com nome menor que 5 caracteres', async function () {
+    sinon.stub(productsService, 'insert').resolves(insertInvalidNameFromServiveError);
+    const request = {
+      body: {
+        name: 'Xena',
+      },
+    };
+
+    await productsController.addProduct(request, response);
+
+    expect(response.status).to.have.been.calledWith(422);
+    expect(response.json).to.have.been.calledWith({ message: insertInvalidNameFromServiveError.message });
   });
 
   afterEach(function () {
