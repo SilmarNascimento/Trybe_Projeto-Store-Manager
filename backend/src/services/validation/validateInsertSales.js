@@ -9,7 +9,7 @@ const validateSales = (array) => {
       errorResponse = [...errorResponse, { status: 'BAD_REQUEST', message: error.message }];
     }
     if (error && error.details[0].type === 'number.min') {
-      errorResponse = [...errorResponse, { status: 'INVALID_NUMBER', message: error.message }];
+      errorResponse = [...errorResponse, { status: 'INVALID_VALUE', message: error.message }];
     }
   });
   return errorResponse;
@@ -18,12 +18,15 @@ const validateSales = (array) => {
 const validateProductId = async (array) => {
   let registerError = [];
   array.forEach(async (saleObject) => {
+    console.log('objeto para validação', saleObject);
     const { productId } = saleObject;
     const product = await salesModel.findById(productId);
+    console.log('resposta do findById', product);
     if (!product.length) {
       registerError = [...registerError, { status: 'NOT_FOUND', message: 'Product not found' }];
     }
   });
+  console.log('registro dos erros', registerError);
   return registerError;
 };
 

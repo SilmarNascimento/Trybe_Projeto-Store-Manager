@@ -30,7 +30,6 @@ const insert = async (salesInformation) => {
     const { status, message } = notFoundResponse[0];
     return { status, message };
   }
-  // funcção para chamar a inserção no banco de dados
   const id = await salesModel.insert(salesInformation);
   const data = { id, itemsSold: salesInformation };
   return { status: 'CREATED', data };

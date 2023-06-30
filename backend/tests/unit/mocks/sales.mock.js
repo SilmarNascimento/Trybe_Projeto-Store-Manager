@@ -46,6 +46,147 @@ const requestSalesBody = [
 
 const insertResponse = [{ insertId: 3 }];
 
+// Service Mocks
+const responseExpected = {
+  id: 3,
+  itemsSold: [
+    {
+      productId: 1,
+      quantity: 1,
+    },
+    {
+      productId: 2,
+      quantity: 5,
+    },
+  ],
+};
+
+const reqSalesWithoutId01 = [
+  {
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const reqSalesWithoutId02 = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    quantity: 5,
+  },
+];
+
+const reqSalesWithoutQuantity01 = [
+  {
+    productId: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const reqSalesWithoutQuantity02 = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+  },
+];
+
+const reqSalesNullQuantity01 = [
+  {
+    productId: 1,
+    quantity: 0,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const reqSalesNullQuantity02 = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 0,
+  },
+];
+
+const reqSalesNegativeQuantity01 = [
+  {
+    productId: 1,
+    quantity: -1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const reqSalesNegativeQuantity02 = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: -5,
+  },
+];
+
+const reqSalesInvalidProductId01 = [
+  {
+    productId: 5,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const reqSalesInvalidProductId02 = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    productId: 5,
+    quantity: 5,
+  },
+];
+
+const badRequestResponseErrorProduct = {
+  status: 'BAD_REQUEST',
+  message: '"productId" is required',
+};
+
+const badRequestResponseErrorQuantity = {
+  status: 'BAD_REQUEST',
+  message: '"quantity" is required',
+};
+
+const invalidValueResponseErrorProduct = {
+  status: 'NOT_FOUND',
+  message: 'Product not found',
+};
+
+const invalidValueResponseErrorQuantity = {
+  status: 'INVALID_VALUE',
+  message: '"quantity" must be greater than or equal to 1',
+};
+
 // Controller Mocks
 const allSalesFromController = {
   status: 'SUCCESSFUL',
@@ -67,6 +208,21 @@ module.exports = {
   sale01,
   requestSalesBody,
   insertResponse,
+  responseExpected,
+  reqSalesWithoutId01,
+  reqSalesWithoutId02,
+  reqSalesWithoutQuantity01,
+  reqSalesWithoutQuantity02,
+  reqSalesNullQuantity01,
+  reqSalesNullQuantity02,
+  reqSalesNegativeQuantity01,
+  reqSalesNegativeQuantity02,
+  reqSalesInvalidProductId01,
+  reqSalesInvalidProductId02,
+  badRequestResponseErrorProduct,
+  badRequestResponseErrorQuantity,
+  invalidValueResponseErrorProduct,
+  invalidValueResponseErrorQuantity,
   allSalesFromController,
   saleIdFromController,
   saleIdFromControllerError,

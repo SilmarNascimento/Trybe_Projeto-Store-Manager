@@ -1,7 +1,24 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allSales, sale01 } = require('../mocks/sales.mock');
+const {
+  allSales,
+  sale01,
+  reqSalesWithoutId01,
+  reqSalesWithoutId02,
+  reqSalesWithoutQuantity01,
+  reqSalesWithoutQuantity02,
+  badRequestResponseErrorQuantity,
+  badRequestResponseErrorProduct,
+  reqSalesNullQuantity01,
+  invalidValueResponseErrorQuantity,
+  reqSalesNullQuantity02,
+  reqSalesNegativeQuantity01,
+  reqSalesNegativeQuantity02,
+  reqSalesInvalidProductId01,
+  reqSalesInvalidProductId02,
+  invalidValueResponseErrorProduct,
+} = require('../mocks/sales.mock');
 const { salesService } = require('../../../src/services');
 const { salesModel } = require('../../../src/models');
 
@@ -39,6 +56,109 @@ describe('Realize testes unitários para salesService', function () {
     expect(response.data).to.be.deep.equal(undefined);
     expect(response.message).to.be.deep.equal('Sale not found');
   });
+
+  it('Verifica todas as validações: productId inexistente test1', async function () {
+    const response = await salesService.insert(reqSalesWithoutId01);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(badRequestResponseErrorProduct.status);
+    expect(response.message).to.be.deep.equal(badRequestResponseErrorProduct.message);
+  });
+
+  it('Verifica todas as validações: productId inexistente test2', async function () {
+    const response = await salesService.insert(reqSalesWithoutId02);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(badRequestResponseErrorProduct.status);
+    expect(response.message).to.be.deep.equal(badRequestResponseErrorProduct.message);
+  });
+
+  it('Verifica todas as validações: quantity inexistente test1', async function () {
+    const response = await salesService.insert(reqSalesWithoutQuantity01);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(badRequestResponseErrorQuantity.status);
+    expect(response.message).to.be.deep.equal(badRequestResponseErrorQuantity.message);
+  });
+
+  it('Verifica todas as validações: quantity inexistente test2', async function () {
+    const response = await salesService.insert(reqSalesWithoutQuantity02);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(badRequestResponseErrorQuantity.status);
+    expect(response.message).to.be.deep.equal(badRequestResponseErrorQuantity.message);
+  });
+
+  it('Verifica todas as validações: quantity igual a zero test1', async function () {
+    const response = await salesService.insert(reqSalesNullQuantity01);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(invalidValueResponseErrorQuantity.status);
+    expect(response.message).to.be.deep.equal(invalidValueResponseErrorQuantity.message);
+  });
+
+  it('Verifica todas as validações: quantity igual a zero test2', async function () {
+    const response = await salesService.insert(reqSalesNullQuantity02);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(invalidValueResponseErrorQuantity.status);
+    expect(response.message).to.be.deep.equal(invalidValueResponseErrorQuantity.message);
+  });
+
+  it('Verifica todas as validações: quantity menor que zero test1', async function () {
+    const response = await salesService.insert(reqSalesNegativeQuantity01);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(invalidValueResponseErrorQuantity.status);
+    expect(response.message).to.be.deep.equal(invalidValueResponseErrorQuantity.message);
+  });
+
+  it('Verifica todas as validações: quantity menor que zero test2', async function () {
+    const response = await salesService.insert(reqSalesNegativeQuantity02);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(invalidValueResponseErrorQuantity.status);
+    expect(response.message).to.be.deep.equal(invalidValueResponseErrorQuantity.message);
+  });
+
+  it('Verifica todas as validações: productId não cadastrado test1', async function () {
+    sinon.stub(salesModel, 'findById')
+      .onFirstCall()
+      .resolves([])
+      .onSecondCall()
+      .resolves(sale01);
+      
+    const response = await salesService.insert(reqSalesInvalidProductId01);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(invalidValueResponseErrorProduct.status);
+    expect(response.message).to.be.deep.equal(invalidValueResponseErrorProduct.message);
+  });
+
+  /* it('Verifica todas as validações: productId não cadastrado test2', async function () {
+    sinon.stub(salesModel, 'findById')
+      .onFirstCall()
+      .resolves(sale01)
+      .onSecondCall()
+      .resolves([]);
+
+    const response = await salesService.insert(reqSalesInvalidProductId02);
+
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal(invalidValueResponseErrorProduct.status);
+    expect(response.message).to.be.deep.equal(invalidValueResponseErrorProduct.message);
+  }); */
+
+  /* reqSalesWithoutId01,
+  reqSalesWithoutId02,
+  reqSalesWithoutQuantity01,
+  reqSalesWithoutQuantity02,
+  reqSalesNullQuantity01,
+  reqSalesNullQuantity02,
+  reqSalesNegativeQuantity01,
+  reqSalesNegativeQuantity02,
+  reqSalesInvalidProductId01,
+  reqSalesInvalidProductId02, */
 
   afterEach(function () {
     sinon.restore();
