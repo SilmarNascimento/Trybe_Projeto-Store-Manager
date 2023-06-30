@@ -1,4 +1,5 @@
 const { salesModel } = require('../models');
+const validateSales = require('./validation/validateSales');
 
 const findAll = async () => {
   const products = await salesModel.findAll();
@@ -17,8 +18,12 @@ const findById = async (id) => {
   return { status: 'SUCCESSFUL', data: saleInformation };
 };
 
-const insert = async () => {
-
+const insert = async (salesInformation) => {
+  const errorResponse = validateSales(salesInformation);
+  if (errorResponse.length) {
+    const { status, message } = errorResponse[0];
+    return { status, message };
+  }
 };
 
 module.exports = {
