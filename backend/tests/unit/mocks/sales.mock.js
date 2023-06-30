@@ -1,3 +1,4 @@
+// Model Mocks
 const allSales = [
   {
     saleId: 1,
@@ -32,6 +33,20 @@ const sale01 = [
   },
 ];
 
+const requestSalesBody = [
+  {
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    productId: 2,
+    quantity: 5,
+  },
+];
+
+const insertResponse = [{ insertId: 3 }];
+
+// Controller Mocks
 const allSalesFromController = {
   status: 'SUCCESSFUL',
   data: allSales,
@@ -50,6 +65,8 @@ const saleIdFromControllerError = {
 module.exports = {
   allSales,
   sale01,
+  requestSalesBody,
+  insertResponse,
   allSalesFromController,
   saleIdFromController,
   saleIdFromControllerError,
