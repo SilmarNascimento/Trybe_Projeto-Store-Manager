@@ -41,9 +41,9 @@ describe('Realize testes unitários para productsService', function () {
   });
 
   it('Verifica o retorno do método insert com dados válidos', async function () {
-    const { insertId } = insertProductResponse[0];
-    const responseBody = { insertId, ...newProduct };
-    sinon.stub(productsModel, 'insert').resolves(insertId);
+    const { insertId: id } = insertProductResponse[0];
+    const responseBody = { id, ...newProduct };
+    sinon.stub(productsModel, 'insert').resolves(id);
 
     const response = await productsService.insert(newProduct);
 
@@ -53,8 +53,8 @@ describe('Realize testes unitários para productsService', function () {
   });
 
   it('Verifica o retorno do método insert com dados inválidos', async function () {
-    const { insertId } = insertProductResponse[0];
-    sinon.stub(productsModel, 'insert').resolves(insertId);
+    const { insertId: id } = insertProductResponse[0];
+    sinon.stub(productsModel, 'insert').resolves(id);
 
     const response = await productsService.insert({ nome: 'Chackran da Xena' });
 

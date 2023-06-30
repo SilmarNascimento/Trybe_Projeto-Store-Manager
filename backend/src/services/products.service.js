@@ -19,8 +19,8 @@ const insert = async (data) => {
   if (isInvalid) {
     return { status: isInvalid.status, message: isInvalid.message };
   }
-  const insertId = await productsModel.insert(data);
-  const newProduct = { insertId, ...data };
+  const id = await productsModel.insert(data);
+  const newProduct = { id, ...data };
   return { status: 'CREATED', data: newProduct };
 };
 
