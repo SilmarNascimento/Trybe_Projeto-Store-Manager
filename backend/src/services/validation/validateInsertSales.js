@@ -1,3 +1,4 @@
+const { salesModel } = require('../../models');
 const { salesSchema } = require('./schema');
 
 const validateSales = (array) => {
@@ -14,4 +15,19 @@ const validateSales = (array) => {
   return errorResponse;
 };
 
-module.exports = validateSales;
+const validateProductId = async (array) => {
+  let registerError = [];
+  array.forEach(async (saleObject) => {
+    const { productId } = saleObject;
+    const product = await salesModel.findById(productId);
+    if (!product.length) {
+      registerError = [...registerError, { status: 'NOT_FOUND', message: 'Product not found' }];
+    }
+  });
+  return registerError;
+};
+
+module.exports = {
+  validateSales,
+  validateProductId,
+};

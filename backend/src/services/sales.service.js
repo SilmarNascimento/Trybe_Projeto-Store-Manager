@@ -1,5 +1,5 @@
 const { salesModel } = require('../models');
-const validateSales = require('./validation/validateSales');
+const { validateProductId, validateSales } = require('./validation/validateInsertSales');
 
 const findAll = async () => {
   const products = await salesModel.findAll();
@@ -24,6 +24,12 @@ const insert = async (salesInformation) => {
     const { status, message } = errorResponse[0];
     return { status, message };
   }
+  const notFoundResponse = await validateProductId(salesInformation);
+  if (notFoundResponse.length) {
+    const { status, message } = notFoundResponse[0];
+    return { status, message };
+  }
+  // funcção para chamar a inserção no banco de dados
 };
 
 module.exports = {

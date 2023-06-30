@@ -1,3 +1,4 @@
+const { formattedColumns, formattedPlaceholders } = require('../utils/formattedHeaders');
 const connection = require('./connection');
 
 const findAll = async () => {
@@ -23,8 +24,19 @@ const findById = async (productId) => {
   return product;
 };
 
-const insert = async () => {
-
+const insert = async (salesArray) => {
+  const db = 'StoreManager';
+  const query = `INSERT INTO ${db}.sales (date) VALUES (now());`;
+  const [{ insertId }] = await connection.execute(query);
+  const [affectedRows] = salesArray.map(async (sale) => {
+    const tableLabel = { saleId: insertId, ...sale };
+    const columns = formattedColumns(tableLabel);
+    const placeholder = formattedPlaceholders(tableLabel);
+    const saleQuery = `INSERT INTO ${db}.sales_products (${columns}) VALUES (${placeholder});`;
+    const [responseObj] = await connection.execute(saleQuery, [insertId, ...Object.values(sale)]);
+    return responseObj.insertId;
+  });
+  console.log(affectedRows);
 };
 
 module.exports = {
