@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError, insertInvalidNameFromServiveError, updatedProduct, updatedProductFromController } = require('../mocks/products.mock');
+const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError, insertInvalidNameFromServiveError, updatedProduct, updatedProductFromController, successDeletedProduct } = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsController } = require('../../../src/controllers');
 
@@ -137,7 +137,7 @@ describe('Realize testes unitários para productsControler', function () {
     expect(response.json).to.have.been.calledWith({ message: productIdFromControllerError.message });
   });
 
-  it('Verifica se é possível atualizar od dados de um produto com informações válidas', async function () {
+  it('Verifica se é possível atualizar os dados de um produto com informações válidas', async function () {
     sinon.stub(productsService, 'update').resolves(updatedProductFromController);
     const request = {
       params: {
@@ -152,6 +152,33 @@ describe('Realize testes unitários para productsControler', function () {
 
     expect(response.status).to.have.been.calledWith(200);
     expect(response.json).to.have.been.calledWith(updatedProduct);
+  });
+
+  it('Verifica o retorno inválido método deleteProduct: productId inválido', async function () {
+    sinon.stub(productsService, 'deleteById').resolves(productIdFromControllerError);
+    const request = {
+      params: {
+        id: 15,
+      },
+    };
+
+    await productsController.deleteProduct(request, response);
+
+    expect(response.status).to.have.been.calledWith(404);
+    expect(response.json).to.have.been.calledWith({ message: productIdFromControllerError.message });
+  });
+
+  it('Verifica se é possível deletar os dados de um produto com id válido', async function () {
+    sinon.stub(productsService, 'deleteById').resolves(successDeletedProduct);
+    const request = {
+      params: {
+        id: 1,
+      },
+    };
+
+    await productsController.deleteProduct(request, response);
+
+    expect(response.status).to.have.been.calledWith(204);
   });
 
   afterEach(function () {

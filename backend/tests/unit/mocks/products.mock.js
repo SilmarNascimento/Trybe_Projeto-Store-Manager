@@ -59,6 +59,10 @@ const updatedProductFromController = {
   data: updatedProduct,
 };
 
+const successDeletedProduct = {
+  status: 'NO_CONTENT',
+};
+
 const productIdFromControllerError = {
   status: 'NOT_FOUND',
   message: 'Product not found',
@@ -92,6 +96,7 @@ module.exports = {
   allProductsFromController,
   productIdFromController,
   updatedProductFromController,
+  successDeletedProduct,
   productIdFromControllerError,
   insertProductFromService,
   insertProductFromServiceError,
