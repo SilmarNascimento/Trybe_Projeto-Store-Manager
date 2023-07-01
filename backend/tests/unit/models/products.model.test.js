@@ -7,6 +7,7 @@ const {
   product01,
   insertProductResponse,
   newProduct,
+  updateProductResponse,
 } = require('../mocks/products.mock');
 const { productsModel } = require('../../../src/models');
 
@@ -39,6 +40,16 @@ describe('Realiza testes unitários para productsModel', function () {
 
     expect(response).to.be.an('number');
     expect(response).to.be.equal(4);
+  });
+
+  it('Verifica se o método update retorna o valor esperado', async function () {
+    const productId = 1;
+    const productData = { name: 'Martelo do Batman' };
+    sinon.stub(connection, 'execute').resolves(updateProductResponse);
+
+    const response = await productsModel.update(productId, productData);
+
+    expect(response).to.be.equal(undefined);
   });
 
   afterEach(function () {

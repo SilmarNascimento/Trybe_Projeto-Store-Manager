@@ -29,11 +29,9 @@ const update = async (productId, productData) => {
   const placeholder = columns.map((_key) => '? ').join(', ');
   const query = `
   UPDATE ${db}.products
-  SET name = ${placeholder}
+  SET ${columns} = ${placeholder}
   WHERE id = ?;`;
-  const [{ affectedRows }] = await connection.execute(query, [values, productId]);
-  console.log(affectedRows);
-  return affectedRows;
+  await connection.execute(query, [values, productId]);
 };
 
 module.exports = {

@@ -33,8 +33,12 @@ const update = async (productId, productData) => {
   if (!product) {
     return { status: 'NOT_FOUND', message: 'Product not found' };
   }
-  const updateResponse = await productsModel.update(productId, productData);
-  return { status: 'SUCCESSFUL', data: updateResponse };
+  await productsModel.update(productId, productData);
+  const updatedProduct = {
+    id: productId,
+    ...productData,
+  };
+  return { status: 'SUCCESSFUL', data: updatedProduct };
 };
 
 module.exports = {

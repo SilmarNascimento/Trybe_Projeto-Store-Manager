@@ -15,6 +15,8 @@ const product01 = {
   name: 'Martelo de Thor',
 };
 
+const updateProductResponse = [{ affectedRows: 1 }];
+
 // Service Mocks
 const insertProductResponse = [{
   insertId: 4,
@@ -22,6 +24,23 @@ const insertProductResponse = [{
 
 const newProduct = {
   name: 'Chackran da Xena',
+};
+
+const reqWithoutName = {
+  nome: 'Martelo do Batman',
+};
+
+const reqShortLength = {
+  name: 'Mart',
+};
+
+const reqSuccessful = {
+  name: 'Martelo do Batman',
+};
+
+const updatedProduct = {
+  id: 1,
+  ...reqSuccessful,
 };
 
 // Controller Mocks
@@ -58,6 +77,11 @@ const insertInvalidNameFromServiveError = {
 module.exports = {
   allProducts,
   product01,
+  reqWithoutName,
+  reqShortLength,
+  reqSuccessful,
+  updatedProduct,
+  updateProductResponse,
   insertProductResponse,
   newProduct,
   allProductsFromController,

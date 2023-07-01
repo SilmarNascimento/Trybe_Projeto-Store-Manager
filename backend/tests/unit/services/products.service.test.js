@@ -1,7 +1,19 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProducts, product01, insertProductResponse, newProduct } = require('../mocks/products.mock');
+const {
+  allProducts,
+  product01,
+  insertProductResponse,
+  newProduct,
+  reqWithoutName,
+  insertProductFromServiceError: updatedProductFromServiceError,
+  reqShortLength,
+  insertInvalidNameFromServiveError: updatedInvalidNameFromServiveError,
+  reqSuccessful,
+  productIdFromControllerError,
+  updatedProduct,
+} = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsModel } = require('../../../src/models');
 
@@ -72,6 +84,44 @@ describe('Realize testes unitários para productsService', function () {
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal('INVALID_VALUE');
     expect(response.message).to.be.deep.equal('"name" length must be at least 5 characters long');
+  });
+
+  it('Verifica todas as validações: name required', async function () {
+    const response = await productsService.update(1, reqWithoutName);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('BAD_REQUEST');
+    expect(response.message).to.be.deep.equal(updatedProductFromServiceError.message);
+  });
+
+  it('Verifica todas as validações: length maior igual a 5 required', async function () {
+    const response = await productsService.update(1, reqShortLength);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('INVALID_VALUE');
+    expect(response.message).to.be.deep.equal(updatedInvalidNameFromServiveError.message);
+  });
+
+  it('Verifica todas as validações: invalid productId', async function () {
+    sinon.stub(productsModel, 'findById').resolves();
+
+    const response = await productsService.update(15, reqSuccessful);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('NOT_FOUND');
+    expect(response.message).to.be.deep.equal(productIdFromControllerError.message);
+  });
+
+  it('Verifica se é possivel atualizar um produto com informações válidas', async function () {
+    sinon.stub(productsModel, 'findById').resolves(true);
+    sinon.stub(productsModel, 'update').resolves(undefined);
+
+    const response = await productsService.update(1, reqSuccessful);
+    console.log(response);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('SUCCESSFUL');
+    expect(response.data).to.be.deep.equal(updatedProduct);
   });
 
   afterEach(function () {
