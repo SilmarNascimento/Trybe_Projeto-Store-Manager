@@ -37,9 +37,21 @@ const insert = async (salesArray) => {
   });
   return insertId;
 };
+const deleteById = async (saleId) => {
+  const db = 'StoreManager';
+  const querySalesProducttable = `
+  DELETE FROM ${db}.sales_products
+  WHERE sale_id = ?;`;
+  const querySalesTable = `
+  DELETE FROM ${db}.sales
+  WHERE id = ?;`;
+  await connection.execute(querySalesProducttable, [saleId]);
+  await connection.execute(querySalesTable, [saleId]);
+};
 
 module.exports = {
   findAll,
   findById,
   insert,
+  deleteById,
 };

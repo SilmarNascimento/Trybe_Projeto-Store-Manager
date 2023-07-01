@@ -34,8 +34,18 @@ const insert = async (salesInformation) => {
   return { status: 'CREATED', data };
 };
 
+const deleteById = async (saleId) => {
+  const sale = await salesModel.findById(saleId);
+  if (!sale.length) {
+    return { status: 'NOT_FOUND', message: 'Sale not found' };
+  }
+  await salesModel.deleteById(saleId);
+  return { status: 'NO_CONTENT' };
+};
+
 module.exports = {
   findAll,
   findById,
   insert,
+  deleteById,
 };
