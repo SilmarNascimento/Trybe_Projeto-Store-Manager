@@ -117,7 +117,6 @@ describe('Realize testes unitários para productsService', function () {
     sinon.stub(productsModel, 'update').resolves(undefined);
 
     const response = await productsService.update(1, reqSuccessful);
-    console.log(response);
     
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal('SUCCESSFUL');
