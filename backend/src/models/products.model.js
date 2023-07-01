@@ -29,7 +29,7 @@ const update = async (productId, productData) => {
   const placeholder = columns.map((_key) => '? ').join(', ');
   const query = `
   UPDATE ${db}.products
-  SET ${columns} = ${placeholder}
+  SET name = ${placeholder}
   WHERE id = ?;`;
   await connection.execute(query, [values, productId]);
 };

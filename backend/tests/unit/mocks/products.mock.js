@@ -54,6 +54,11 @@ const productIdFromController = {
   data: product01,
 };
 
+const updatedProductFromController = {
+  status: 'SUCCESSFUL',
+  data: updatedProduct,
+};
+
 const productIdFromControllerError = {
   status: 'NOT_FOUND',
   message: 'Product not found',
@@ -86,6 +91,7 @@ module.exports = {
   newProduct,
   allProductsFromController,
   productIdFromController,
+  updatedProductFromController,
   productIdFromControllerError,
   insertProductFromService,
   insertProductFromServiceError,
