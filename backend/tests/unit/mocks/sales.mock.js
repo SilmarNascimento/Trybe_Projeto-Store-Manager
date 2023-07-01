@@ -187,6 +187,11 @@ const invalidValueResponseErrorQuantity = {
   message: '"quantity" must be greater than or equal to 1',
 };
 
+const registeredSale = {
+  status: 'CREATED',
+  data: responseExpected,
+};
+
 // Controller Mocks
 const allSalesFromController = {
   status: 'SUCCESSFUL',
@@ -223,6 +228,7 @@ module.exports = {
   badRequestResponseErrorQuantity,
   invalidValueResponseErrorProduct,
   invalidValueResponseErrorQuantity,
+  registeredSale,
   allSalesFromController,
   saleIdFromController,
   saleIdFromControllerError,
