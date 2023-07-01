@@ -23,7 +23,17 @@ const insert = async (data) => {
 };
 
 const update = async (productId, productData) => {
-
+  const db = 'StoreManager';
+  const columns = Object.keys(productData);
+  const values = Object.values(productData);
+  const placeholder = columns.map((_key) => '? ').join(', ');
+  const query = `
+  UPDATE ${db}.products
+  SET name = ${placeholder}
+  WHERE id = ?;`;
+  const [{ affectedRows }] = await connection.execute(query, [values, productId]);
+  console.log(affectedRows);
+  return affectedRows;
 };
 
 module.exports = {

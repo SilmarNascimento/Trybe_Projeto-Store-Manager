@@ -25,7 +25,16 @@ const insert = async (data) => {
 };
 
 const update = async (productId, productData) => {
-
+  const isInvalid = validateProduct(productData);
+  if (isInvalid) {
+    return { status: isInvalid.status, message: isInvalid.message };
+  }
+  const product = await productsModel.findById(productId);
+  if (!product) {
+    return { status: 'NOT_FOUND', message: 'Product not found' };
+  }
+  const updateResponse = await productsModel.update(productId, productData);
+  return { status: 'SUCCESSFUL', data: updateResponse };
 };
 
 module.exports = {
