@@ -32,7 +32,6 @@ describe('Realiza testes unitários para salesModel', function () {
     sinon.stub(connection, 'execute').resolves(insertResponse);
 
     const response = await salesModel.insert(requestSalesBody);
-    console.log(response);
 
     expect(response).to.be.an('number');
     expect(response).to.be.deep.equal(insertId);
