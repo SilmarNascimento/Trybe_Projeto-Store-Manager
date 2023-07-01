@@ -35,7 +35,7 @@ const update = async (productId, productData) => {
   }
   await productsModel.update(productId, productData);
   const updatedProduct = {
-    id: productId,
+    id: Number(productId),
     ...productData,
   };
   return { status: 'SUCCESSFUL', data: updatedProduct };
