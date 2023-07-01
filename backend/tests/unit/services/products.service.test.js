@@ -123,6 +123,26 @@ describe('Realize testes unitários para productsService', function () {
     expect(response.data).to.be.deep.equal(updatedProduct);
   });
 
+  it('Verifica se é possível deletar um produto com id não existente', async function () {
+    sinon.stub(productsModel, 'findById').resolves(undefined);
+
+    const response = await productsService.deleteById(15);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('NOT_FOUND');
+    expect(response.message).to.be.deep.equal(productIdFromControllerError.message);
+  });
+
+  it('Verifica se é possível deletar um produto com id válido', async function () {
+    sinon.stub(productsModel, 'findById').resolves(product01);
+    sinon.stub(productsModel, 'deleteById').resolves(1);
+
+    const response = await productsService.deleteById(1);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('NO_CONTENT');
+  });
+
   afterEach(function () {
     sinon.restore();
   });

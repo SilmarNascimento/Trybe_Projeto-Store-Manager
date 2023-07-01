@@ -49,7 +49,16 @@ describe('Realiza testes unitários para productsModel', function () {
 
     const response = await productsModel.update(productId, productData);
 
-    expect(response).to.be.equal(undefined);
+    expect(response).to.be.equal(1);
+  });
+
+  it('Verifica se o método deleteById retorna o valor esperado', async function () {
+    const productId = 1;
+    sinon.stub(connection, 'execute').resolves(updateProductResponse);
+
+    const response = await productsModel.deleteById(productId);
+
+    expect(response).to.be.equal(1);
   });
 
   afterEach(function () {

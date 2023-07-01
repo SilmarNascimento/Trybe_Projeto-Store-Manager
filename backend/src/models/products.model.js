@@ -29,7 +29,15 @@ const update = async (productId, productData) => {
   UPDATE ${db}.products
   SET name = ?
   WHERE id = ?;`;
-  await connection.execute(query, [...values, productId]);
+  const [{ affectedRows }] = await connection.execute(query, [...values, productId]);
+  return affectedRows;
+};
+
+const deleteById = async (productId) => {
+  const db = 'StoreManager';
+  const query = `DELETE FROM ${db}.products WHERE id = ?;`;
+  const [{ affectedRows }] = await connection.execute(query, [productId]);
+  return affectedRows;
 };
 
 module.exports = {
@@ -37,4 +45,5 @@ module.exports = {
   findById,
   insert,
   update,
+  deleteById,
 };
