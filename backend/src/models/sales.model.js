@@ -29,14 +29,18 @@ const insert = async (salesArray) => {
   const db = 'StoreManager';
   const query = `INSERT INTO ${db}.sales (date) VALUES (now());`;
   const [{ insertId }] = await connection.execute(query);
-  salesArray.forEach(async (sale) => {
+  const promise = salesArray.map(async (sale) => {
     const tableLabel = { saleId: insertId, ...sale };
     const columns = formattedColumns(tableLabel);
     const placeholder = formattedPlaceholders(tableLabel);
     const saleQuery = `INSERT INTO ${db}.sales_products (${columns}) VALUES (${placeholder});`;
-    await connection.execute(saleQuery, [insertId, ...Object.values(sale)]);
+    const [response] = await connection.execute(saleQuery, [insertId, ...Object.values(sale)]);
+    return response.insertId;
   });
-  return insertId;
+  const insertResponse = await Promise.all(promise);
+  if (!insertResponse.some((row) => typeof row !== 'number')) {
+    return insertId;
+  }
 };
 const deleteById = async (saleId) => {
   const db = 'StoreManager';
@@ -46,8 +50,12 @@ const deleteById = async (saleId) => {
   const querySalesTable = `
   DELETE FROM ${db}.sales
   WHERE id = ?;`;
-  await connection.execute(querySalesProductTable, [saleId]);
-  await connection.execute(querySalesTable, [saleId]);
+  const [{ affectedRows }] = await connection.execute(querySalesProductTable, [saleId]);
+  const [{ affectedRows: saleRow }] = await connection.execute(querySalesTable, [saleId]);
+  if (affectedRows && saleRow) {
+    return { status: 'SUCCESS' };
+  }
+  return { status: 'FAIL' };
 };
 
 module.exports = {

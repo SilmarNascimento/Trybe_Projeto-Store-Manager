@@ -185,12 +185,22 @@ describe('Realize testes unitários para salesService', function () {
 
   it('Verifica se é possível deletar um produto com id válido', async function () {
     sinon.stub(salesModel, 'findById').resolves(saleFoundByIdResponse);
-    sinon.stub(salesModel, 'deleteById').resolves(undefined);
+    sinon.stub(salesModel, 'deleteById').resolves({ status: 'SUCCESS' });
 
     const response = await salesService.deleteById(1);
     
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal('NO_CONTENT');
+  });
+
+  it('Verifica se ocorreu um erro no servidor ao deletar um produto com id válido', async function () {
+    sinon.stub(salesModel, 'findById').resolves(saleFoundByIdResponse);
+    sinon.stub(salesModel, 'deleteById').resolves({ status: 'FAIL' });
+
+    const response = await salesService.deleteById(1);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.deep.equal('FAIL');
   });
 
   afterEach(function () {

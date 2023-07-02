@@ -39,8 +39,11 @@ const deleteById = async (saleId) => {
   if (!sale.length) {
     return { status: 'NOT_FOUND', message: 'Sale not found' };
   }
-  await salesModel.deleteById(saleId);
-  return { status: 'NO_CONTENT' };
+  const { status } = await salesModel.deleteById(saleId);
+  if (status === 'SUCCESS') {
+    return { status: 'NO_CONTENT' };
+  }
+  return { status: 'FAIL' };
 };
 
 module.exports = {

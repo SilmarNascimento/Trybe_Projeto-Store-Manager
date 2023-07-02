@@ -27,8 +27,17 @@ describe('Realiza testes unitários para salesModel', function () {
     expect(response).to.be.deep.equal(sale01);
   });
 
+  it('Verifica se o método findById está implementado corretamente para um id inválido', async function () {
+    sinon.stub(connection, 'execute').resolves([[]]);
+
+    const response = await salesModel.findById(15);
+    
+    expect(response).to.be.an('array');
+    expect(response).to.be.deep.equal([]);
+  });
+
   it('Verifica se o método insert está implementado corretamente', async function () {
-    const { insertId } = insertResponse[0];
+    const [{ insertId }] = insertResponse;
     sinon.stub(connection, 'execute').resolves(insertResponse);
 
     const response = await salesModel.insert(requestSalesBody);
@@ -43,7 +52,7 @@ describe('Realiza testes unitários para salesModel', function () {
 
     const response = await salesModel.deleteById(productId);
 
-    expect(response).to.be.equal(undefined);
+    expect(response).to.be.deep.equal({ status: 'SUCCESS' });
   });
 
   afterEach(function () {

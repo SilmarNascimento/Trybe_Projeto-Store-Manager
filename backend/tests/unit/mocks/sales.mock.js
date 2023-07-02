@@ -46,7 +46,7 @@ const requestSalesBody = [
 
 const insertResponse = [{ insertId: 3 }];
 
-const deletedResponse = [{ affectRows: 1 }]; 
+const deletedResponse = [{ affectedRows: 1 }]; 
 
 // Service Mocks
 const responseExpected = {
