@@ -46,6 +46,8 @@ const requestSalesBody = [
 
 const insertResponse = [{ insertId: 3 }];
 
+const deletedResponse = [{ affectRows: 1 }]; 
+
 // Service Mocks
 const responseExpected = {
   id: 3,
@@ -60,6 +62,21 @@ const responseExpected = {
     },
   ],
 };
+
+const saleFoundByIdResponse = [
+  {
+    saleId: 1,
+    date: '2021-09-09T04:54:29.000Z',
+    productId: 1,
+    quantity: 1,
+  },
+  {
+    saleId: 1,
+    date: '2021-09-09T04:54:29.000Z',
+    productId: 2,
+    quantity: 5,
+  },
+];
 
 const reqSalesWithoutId01 = [
   {
@@ -177,43 +194,32 @@ const badRequestResponseErrorQuantity = {
   message: '"quantity" is required',
 };
 
-const invalidValueResponseErrorProduct = {
-  status: 'NOT_FOUND',
-  message: 'Product not found',
-};
+const invalidValueResponseErrorProduct = { status: 'NOT_FOUND', message: 'Product not found' };
 
 const invalidValueResponseErrorQuantity = {
   status: 'INVALID_VALUE',
   message: '"quantity" must be greater than or equal to 1',
 };
 
-const registeredSale = {
-  status: 'CREATED',
-  data: responseExpected,
-};
+const registeredSale = { status: 'CREATED', data: responseExpected };
 
 // Controller Mocks
-const allSalesFromController = {
-  status: 'SUCCESSFUL',
-  data: allSales,
-};
+const allSalesFromController = { status: 'SUCCESSFUL', data: allSales };
 
-const saleIdFromController = {
-  status: 'SUCCESSFUL',
-  data: sale01,
-};
+const saleIdFromController = { status: 'SUCCESSFUL', data: sale01 };
 
-const saleIdFromControllerError = {
-  status: 'NOT_FOUND',
-  message: 'Sale not found',
-};
+const saleIdFromControllerError = { status: 'NOT_FOUND', message: 'Sale not found' };
+
+const successDeletedSale = { status: 'NO_CONTENT' };
 
 module.exports = {
   allSales,
   sale01,
   requestSalesBody,
   insertResponse,
+  deletedResponse,
   responseExpected,
+  saleFoundByIdResponse,
   reqSalesWithoutId01,
   reqSalesWithoutId02,
   reqSalesWithoutQuantity01,
@@ -232,4 +238,5 @@ module.exports = {
   allSalesFromController,
   saleIdFromController,
   saleIdFromControllerError,
+  successDeletedSale,
 };

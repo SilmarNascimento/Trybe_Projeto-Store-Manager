@@ -20,6 +20,8 @@ const {
   invalidValueResponseErrorProduct,
   insertResponse,
   requestSalesBody,
+  saleIdFromControllerError,
+  saleFoundByIdResponse,
 } = require('../mocks/sales.mock');
 const { salesService } = require('../../../src/services');
 const { salesModel } = require('../../../src/models');
@@ -169,6 +171,26 @@ describe('Realize testes unitários para salesService', function () {
     expect(response).to.be.an('object');
     expect(response.status).to.be.equal('CREATED');
     expect(response.data).to.be.deep.equal(registeredSale);
+  });
+
+  it('Verifica se não é possível deletar um produto com id não existente', async function () {
+    sinon.stub(salesModel, 'findById').resolves([]);
+
+    const response = await salesService.deleteById(15);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('NOT_FOUND');
+    expect(response.message).to.be.deep.equal(saleIdFromControllerError.message);
+  });
+
+  it('Verifica se é possível deletar um produto com id válido', async function () {
+    sinon.stub(salesModel, 'findById').resolves(saleFoundByIdResponse);
+    sinon.stub(salesModel, 'deleteById').resolves(undefined);
+
+    const response = await salesService.deleteById(1);
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('NO_CONTENT');
   });
 
   afterEach(function () {

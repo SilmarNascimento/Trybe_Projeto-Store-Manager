@@ -123,7 +123,7 @@ describe('Realize testes unitários para productsService', function () {
     expect(response.data).to.be.deep.equal(updatedProduct);
   });
 
-  it('Verifica se é possível deletar um produto com id não existente', async function () {
+  it('Verifica se não é possível deletar um produto com id não existente', async function () {
     sinon.stub(productsModel, 'findById').resolves(undefined);
 
     const response = await productsService.deleteById(15);

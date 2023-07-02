@@ -15,6 +15,7 @@ const {
   reqSalesInvalidProductId02,
   requestSalesBody,
   registeredSale,
+  successDeletedSale,
 } = require('../mocks/sales.mock');
 const { salesService } = require('../../../src/services');
 const { salesController } = require('../../../src/controllers');
@@ -120,6 +121,33 @@ describe('Realize testes unitários para salesControler', function () {
 
     expect(response.status).to.have.been.calledWith(201);
     expect(response.json).to.have.been.calledWith(registeredSale.data);
+  });
+
+  it('Verifica o retorno inválido método deleteProduct: productId inválido', async function () {
+    sinon.stub(salesService, 'deleteById').resolves(saleIdFromControllerError);
+    const request = {
+      params: {
+        id: 15,
+      },
+    };
+
+    await salesController.deleteSale(request, response);
+
+    expect(response.status).to.have.been.calledWith(404);
+    expect(response.json).to.have.been.calledWith({ message: saleIdFromControllerError.message });
+  });
+
+  it('Verifica se é possível deletar os dados de um produto com id válido', async function () {
+    sinon.stub(salesService, 'deleteById').resolves(successDeletedSale);
+    const request = {
+      params: {
+        id: 1,
+      },
+    };
+
+    await salesController.deleteSale(request, response);
+
+    expect(response.status).to.have.been.calledWith(204);
   });
 
   afterEach(function () {

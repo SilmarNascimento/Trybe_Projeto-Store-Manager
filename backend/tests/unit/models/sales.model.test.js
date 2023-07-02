@@ -2,7 +2,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const connection = require('../../../src/models/connection');
-const { allSales, sale01, insertResponse, requestSalesBody } = require('../mocks/sales.mock');
+const { allSales, sale01, insertResponse, requestSalesBody, deletedResponse } = require('../mocks/sales.mock');
 const { salesModel } = require('../../../src/models');
 
 const { expect } = chai;
@@ -35,6 +35,15 @@ describe('Realiza testes unitários para salesModel', function () {
 
     expect(response).to.be.an('number');
     expect(response).to.be.deep.equal(insertId);
+  });
+
+  it('Verifica se o método deleteById retorna o valor esperado', async function () {
+    const productId = 1;
+    sinon.stub(connection, 'execute').resolves(deletedResponse);
+
+    const response = await salesModel.deleteById(productId);
+
+    expect(response).to.be.equal(undefined);
   });
 
   afterEach(function () {
