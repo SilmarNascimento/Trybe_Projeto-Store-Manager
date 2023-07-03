@@ -36,7 +36,7 @@ const deleteSale = async (request, response, _next) => {
 const updateQuantity = async (request, response, _next) => {
   const { saleId, productId } = request.params;
   const quantity = request.body;
-  const { status, data, message } = await salesService.putQuantity(saleId, productId, quantity);
+  const { status, data, message } = await salesService.updateQuantity(saleId, productId, quantity);
   if (!data) {
     return response.status(mapStatus(status)).json({ message });
   }

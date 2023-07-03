@@ -1,8 +1,10 @@
 // Model Mocks
+const dateSale01 = '2021-09-09T04:54:29.000Z';
+
 const allSales = [
   {
     saleId: 1,
-    date: '2021-09-09T04:54:29.000Z',
+    date: dateSale01,
     productId: 1,
     quantity: 2,
   },
@@ -22,7 +24,7 @@ const allSales = [
 
 const sale01 = [
   {
-    date: '2021-09-09T04:54:29.000Z',
+    date: dateSale01,
     productId: 1,
     quantity: 2,
   },
@@ -46,7 +48,9 @@ const requestSalesBody = [
 
 const insertResponse = [{ insertId: 3 }];
 
-const deletedResponse = [{ affectedRows: 1 }]; 
+const deletedResponse = [{ affectedRows: 1 }];
+
+const updatedResponse = [{ affectedRows: 1 }];
 
 // Service Mocks
 const responseExpected = {
@@ -63,22 +67,29 @@ const responseExpected = {
   ],
 };
 
+const updatedresponseExpected = {
+  saleId: 1,
+  date: dateSale01,
+  productId: 1,
+  quantity: 5,
+};
+
 const saleFoundByIdResponse = [
   {
     saleId: 1,
-    date: '2021-09-09T04:54:29.000Z',
+    date: dateSale01,
     productId: 1,
     quantity: 1,
   },
   {
     saleId: 1,
-    date: '2021-09-09T04:54:29.000Z',
+    date: dateSale01,
     productId: 2,
     quantity: 5,
   },
 ];
 
-const reqSalesWithoutId01 = [
+const reqSalesWithoutId = [
   {
     quantity: 1,
   },
@@ -88,27 +99,7 @@ const reqSalesWithoutId01 = [
   },
 ];
 
-const reqSalesWithoutId02 = [
-  {
-    productId: 1,
-    quantity: 1,
-  },
-  {
-    quantity: 5,
-  },
-];
-
-const reqSalesWithoutQuantity01 = [
-  {
-    productId: 1,
-  },
-  {
-    productId: 2,
-    quantity: 5,
-  },
-];
-
-const reqSalesWithoutQuantity02 = [
+const reqSalesWithoutQuantity = [
   {
     productId: 1,
     quantity: 1,
@@ -118,7 +109,7 @@ const reqSalesWithoutQuantity02 = [
   },
 ];
 
-const reqSalesNullQuantity01 = [
+const reqSalesNullQuantity = [
   {
     productId: 1,
     quantity: 0,
@@ -129,29 +120,7 @@ const reqSalesNullQuantity01 = [
   },
 ];
 
-const reqSalesNullQuantity02 = [
-  {
-    productId: 1,
-    quantity: 1,
-  },
-  {
-    productId: 2,
-    quantity: 0,
-  },
-];
-
-const reqSalesNegativeQuantity01 = [
-  {
-    productId: 1,
-    quantity: -1,
-  },
-  {
-    productId: 2,
-    quantity: 5,
-  },
-];
-
-const reqSalesNegativeQuantity02 = [
+const reqSalesNegativeQuantity = [
   {
     productId: 1,
     quantity: 1,
@@ -162,24 +131,13 @@ const reqSalesNegativeQuantity02 = [
   },
 ];
 
-const reqSalesInvalidProductId01 = [
+const reqSalesInvalidProductId = [
   {
     productId: 5,
     quantity: 1,
   },
   {
     productId: 2,
-    quantity: 5,
-  },
-];
-
-const reqSalesInvalidProductId02 = [
-  {
-    productId: 1,
-    quantity: 1,
-  },
-  {
-    productId: 5,
     quantity: 5,
   },
 ];
@@ -194,6 +152,11 @@ const badRequestResponseErrorQuantity = {
   message: '"quantity" is required',
 };
 
+const badRequestProductIdNotFoundError = {
+  status: 'NOT_FOUND',
+  message: 'Product not found in sale',
+};
+
 const invalidValueResponseErrorProduct = { status: 'NOT_FOUND', message: 'Product not found' };
 
 const invalidValueResponseErrorQuantity = {
@@ -203,7 +166,6 @@ const invalidValueResponseErrorQuantity = {
 
 const registeredSale = { status: 'CREATED', data: responseExpected };
 
-// Controller Mocks
 const allSalesFromController = { status: 'SUCCESSFUL', data: allSales };
 
 const saleIdFromController = { status: 'SUCCESSFUL', data: sale01 };
@@ -212,26 +174,26 @@ const saleIdFromControllerError = { status: 'NOT_FOUND', message: 'Sale not foun
 
 const successDeletedSale = { status: 'NO_CONTENT' };
 
+const InternalServerError = { status: 'FAIL', message: 'Internal Server Error' };
+
 module.exports = {
   allSales,
   sale01,
   requestSalesBody,
   insertResponse,
   deletedResponse,
+  updatedResponse,
   responseExpected,
+  updatedresponseExpected,
   saleFoundByIdResponse,
-  reqSalesWithoutId01,
-  reqSalesWithoutId02,
-  reqSalesWithoutQuantity01,
-  reqSalesWithoutQuantity02,
-  reqSalesNullQuantity01,
-  reqSalesNullQuantity02,
-  reqSalesNegativeQuantity01,
-  reqSalesNegativeQuantity02,
-  reqSalesInvalidProductId01,
-  reqSalesInvalidProductId02,
+  reqSalesWithoutId,
+  reqSalesWithoutQuantity,
+  reqSalesNullQuantity,
+  reqSalesNegativeQuantity,
+  reqSalesInvalidProductId,
   badRequestResponseErrorProduct,
   badRequestResponseErrorQuantity,
+  badRequestProductIdNotFoundError,
   invalidValueResponseErrorProduct,
   invalidValueResponseErrorQuantity,
   registeredSale,
@@ -239,4 +201,5 @@ module.exports = {
   saleIdFromController,
   saleIdFromControllerError,
   successDeletedSale,
+  InternalServerError,
 };

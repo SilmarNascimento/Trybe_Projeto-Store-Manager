@@ -44,10 +44,10 @@ const deleteById = async (saleId) => {
   if (status === 'SUCCESS') {
     return { status: 'NO_CONTENT' };
   }
-  return { status: 'FAIL' };
+  return { status: 'FAIL', message: 'Internal Server Error' };
 };
 
-const putQuantity = async (saleId, productId, quantityObj) => {
+const updateQuantity = async (saleId, productId, quantityObj) => {
   const saleFound = await salesModel.findById(saleId);
   if (!saleFound.length) {
     return { status: 'NOT_FOUND', message: 'Sale not found' };
@@ -61,11 +61,9 @@ const putQuantity = async (saleId, productId, quantityObj) => {
   if (wasUpdated.status === 'FAIL') {
     return wasUpdated;
   }
-  const updatedSale = await salesModel.findById(saleId);
-  const productInSale = updatedSale.find((itemSold) => itemSold.productId === Number(productId));
-  console.log(saleFound);
-  console.log(productInSale);
-  return { status: 'SUCCESSFUL', data: productInSale };
+  const productInSale = saleFound.find((itemSold) => itemSold.productId === Number(productId));
+  const updatedSale = { ...productInSale, quantity: quantityObj.quantity };
+  return { status: 'SUCCESSFUL', data: updatedSale };
 };
 
 module.exports = {
@@ -73,5 +71,5 @@ module.exports = {
   findById,
   insert,
   deleteById,
-  putQuantity,
+  updateQuantity,
 };

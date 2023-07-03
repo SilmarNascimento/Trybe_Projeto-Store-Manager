@@ -2,7 +2,7 @@ const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const connection = require('../../../src/models/connection');
-const { allSales, sale01, insertResponse, requestSalesBody, deletedResponse } = require('../mocks/sales.mock');
+const { allSales, sale01, insertResponse, requestSalesBody, deletedResponse, updatedResponse } = require('../mocks/sales.mock');
 const { salesModel } = require('../../../src/models');
 
 const { expect } = chai;
@@ -85,7 +85,7 @@ describe('Realiza testes unitários para salesModel', function () {
 
   it('Verifica o retorno inválido do método deleteById: falha no banco de dados test 01', async function () {
     const productId = 1;
-    sinon.stub(connection, 'execute').resolves(insertResponse)
+    sinon.stub(connection, 'execute')
       .onFirstCall()
       .resolves([[]])
       .onSecondCall()
@@ -99,13 +99,56 @@ describe('Realiza testes unitários para salesModel', function () {
 
   it('Verifica o retorno inválido do método deleteById: falha no banco de dados test 02', async function () {
     const productId = 1;
-    sinon.stub(connection, 'execute').resolves(deletedResponse)
+    sinon.stub(connection, 'execute')
       .onFirstCall()
       .resolves(deletedResponse)
       .onSecondCall()
       .resolves([[]]);
 
     const response = await salesModel.deleteById(productId);
+
+    expect(response.status).to.be.deep.equal('FAIL');
+    expect(response.message).to.be.deep.equal('Internal Server Error');
+  });
+
+  it('Verifica se o método updateById retorna o valor esperado', async function () {
+    const saleId = 1;
+    const productId = 1;
+    const quantityObj = { quantity: 3 };
+    sinon.stub(connection, 'execute').resolves(updatedResponse);
+
+    const response = await salesModel.updateById(saleId, productId, quantityObj);
+
+    expect(response).to.be.deep.equal({ status: 'SUCCESS' });
+  });
+
+  it('Verifica o retorno inválido do método updateById: falha no banco de dados test 01', async function () {
+    const saleId = 1;
+    const productId = 1;
+    const quantityObj = { quantity: 3 };
+    sinon.stub(connection, 'execute')
+      .onFirstCall()
+      .resolves(updatedResponse)
+      .onSecondCall()
+      .resolves([[]]);
+
+    const response = await salesModel.updateById(saleId, productId, quantityObj);
+
+    expect(response.status).to.be.deep.equal('FAIL');
+    expect(response.message).to.be.deep.equal('Internal Server Error');
+  });
+
+  it('Verifica o retorno inválido do método updateById: falha no banco de dados test 02', async function () {
+    const saleId = 1;
+    const productId = 1;
+    const quantityObj = { quantity: 3 };
+    sinon.stub(connection, 'execute')
+      .onFirstCall()
+      .resolves([[]])
+      .onSecondCall()
+      .resolves(updatedResponse);
+
+    const response = await salesModel.updateById(saleId, productId, quantityObj);
 
     expect(response.status).to.be.deep.equal('FAIL');
     expect(response.message).to.be.deep.equal('Internal Server Error');
