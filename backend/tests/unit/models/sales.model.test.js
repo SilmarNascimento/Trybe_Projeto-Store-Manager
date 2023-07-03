@@ -93,9 +93,8 @@ describe('Realiza testes unitários para salesModel', function () {
 
     const response = await salesModel.deleteById(productId);
 
-    console.log(response);
-
-    expect(response).to.be.deep.equal({ status: 'FAIL' });
+    expect(response.status).to.be.deep.equal('FAIL');
+    expect(response.message).to.be.deep.equal('Internal Server Error');
   });
 
   it('Verifica o retorno inválido do método deleteById: falha no banco de dados test 02', async function () {
@@ -108,9 +107,8 @@ describe('Realiza testes unitários para salesModel', function () {
 
     const response = await salesModel.deleteById(productId);
 
-    console.log(response);
-
-    expect(response).to.be.deep.equal({ status: 'FAIL' });
+    expect(response.status).to.be.deep.equal('FAIL');
+    expect(response.message).to.be.deep.equal('Internal Server Error');
   });
 
   afterEach(function () {

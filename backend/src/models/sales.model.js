@@ -56,7 +56,23 @@ const deleteById = async (saleId) => {
   if (affectedRows && saleRow) {
     return { status: 'SUCCESS' };
   }
-  return { status: 'FAIL' };
+  return { status: 'FAIL', message: 'Internal Server Error' };
+};
+
+const updateById = async (saleId, productId, { quantity }) => {
+  const db = 'StoreManager';
+  const querySale = `UPDATE ${db}.sales SET date = now() WHERE id = ?;`;
+  const [{ affectedRows: affectedRowSale }] = await connection.execute(querySale, [saleId]);
+  const querySaleProducts = `
+  UPDATE ${db}.sales_products
+  SET quantity = ?
+  WHERE sale_id = ? AND product_id = ?;`;
+  const dependecyArray = [quantity, saleId, productId];
+  const [{ affectedRows }] = await connection.execute(querySaleProducts, dependecyArray);
+  if (affectedRowSale && affectedRows) {
+    return { status: 'SUCCESS' };
+  }
+  return { status: 'FAIL', message: 'Internal Server Error' };
 };
 
 module.exports = {
@@ -64,4 +80,5 @@ module.exports = {
   findById,
   insert,
   deleteById,
+  updateById,
 };
