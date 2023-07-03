@@ -174,6 +174,8 @@ const saleIdFromControllerError = { status: 'NOT_FOUND', message: 'Sale not foun
 
 const successDeletedSale = { status: 'NO_CONTENT' };
 
+const successUpdatedSale = { status: 'SUCCESSFUL', data: updatedresponseExpected };
+
 const InternalServerError = { status: 'FAIL', message: 'Internal Server Error' };
 
 module.exports = {
@@ -201,5 +203,6 @@ module.exports = {
   saleIdFromController,
   saleIdFromControllerError,
   successDeletedSale,
+  successUpdatedSale,
   InternalServerError,
 };
