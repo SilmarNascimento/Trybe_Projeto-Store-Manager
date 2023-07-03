@@ -46,6 +46,34 @@ describe('Realiza testes unitários para salesModel', function () {
     expect(response).to.be.deep.equal(insertId);
   });
 
+  it('Verifica o retorno inválido do método insert: falha no banco de dados test 01', async function () {
+    sinon.stub(connection, 'execute')
+      .onFirstCall()
+      .resolves(insertResponse)
+      .onSecondCall()
+      .resolves([[]])
+      .onThirdCall()
+      .resolves(insertResponse);
+
+    const response = await salesModel.insert(requestSalesBody);
+
+    expect(response).to.be.equal(undefined);
+  });
+  
+  it('Verifica o retorno inválido do método insert: falha no banco de dados test 02', async function () {
+    sinon.stub(connection, 'execute').resolves(insertResponse)
+      .onFirstCall()
+      .resolves(insertResponse)
+      .onSecondCall()
+      .resolves(insertResponse)
+      .onThirdCall()
+      .resolves([[]]);
+
+    const response = await salesModel.insert(requestSalesBody);
+
+    expect(response).to.be.equal(undefined);
+  });
+
   it('Verifica se o método deleteById retorna o valor esperado', async function () {
     const productId = 1;
     sinon.stub(connection, 'execute').resolves(deletedResponse);
@@ -53,6 +81,36 @@ describe('Realiza testes unitários para salesModel', function () {
     const response = await salesModel.deleteById(productId);
 
     expect(response).to.be.deep.equal({ status: 'SUCCESS' });
+  });
+
+  it('Verifica o retorno inválido do método deleteById: falha no banco de dados test 01', async function () {
+    const productId = 1;
+    sinon.stub(connection, 'execute').resolves(insertResponse)
+      .onFirstCall()
+      .resolves([[]])
+      .onSecondCall()
+      .resolves(deletedResponse);
+
+    const response = await salesModel.deleteById(productId);
+
+    console.log(response);
+
+    expect(response).to.be.deep.equal({ status: 'FAIL' });
+  });
+
+  it('Verifica o retorno inválido do método deleteById: falha no banco de dados test 02', async function () {
+    const productId = 1;
+    sinon.stub(connection, 'execute').resolves(deletedResponse)
+      .onFirstCall()
+      .resolves(deletedResponse)
+      .onSecondCall()
+      .resolves([[]]);
+
+    const response = await salesModel.deleteById(productId);
+
+    console.log(response);
+
+    expect(response).to.be.deep.equal({ status: 'FAIL' });
   });
 
   afterEach(function () {

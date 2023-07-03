@@ -35,13 +35,14 @@ const insert = async (salesArray) => {
     const placeholder = formattedPlaceholders(tableLabel);
     const saleQuery = `INSERT INTO ${db}.sales_products (${columns}) VALUES (${placeholder});`;
     const [response] = await connection.execute(saleQuery, [insertId, ...Object.values(sale)]);
-    return response.insertId;
+    return response;
   });
   const insertResponse = await Promise.all(promise);
-  if (!insertResponse.some((row) => typeof row !== 'number')) {
+  if (insertResponse.every((row) => row.length !== 0)) {
     return insertId;
   }
 };
+
 const deleteById = async (saleId) => {
   const db = 'StoreManager';
   const querySalesProductTable = `
