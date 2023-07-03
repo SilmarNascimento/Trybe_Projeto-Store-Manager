@@ -61,7 +61,10 @@ const putQuantity = async (saleId, productId, quantityObj) => {
   if (wasUpdated.status === 'FAIL') {
     return wasUpdated;
   }
-  const productInSale = saleFound.find((itemSold) => itemSold.productId === productId);
+  const updatedSale = await salesModel.findById(saleId);
+  const productInSale = updatedSale.find((itemSold) => itemSold.productId === Number(productId));
+  console.log(saleFound);
+  console.log(productInSale);
   return { status: 'SUCCESSFUL', data: productInSale };
 };
 
