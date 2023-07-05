@@ -14,6 +14,14 @@ const findById = async (productId) => {
   return { status: 'NOT_FOUND', message: 'Product not found' };
 };
 
+const findByQuery = async (query) => {
+  const products = await productsModel.findByQuery(query);
+  if (!products) {
+    return { status: 'FAIL', message: 'Internal Server Error' };
+  }
+  return { status: 'SUCCESSFUL', data: products };
+};
+
 const insert = async (data) => {
   const isInvalid = validateProduct(data);
   if (isInvalid) {
@@ -56,4 +64,5 @@ module.exports = {
   insert,
   update,
   deleteById,
+  findByQuery,
 };

@@ -14,6 +14,16 @@ const findById = async (productId) => {
   return camelize(product);
 };
 
+const findByQuery = async (q) => {
+  const db = 'StoreManager';
+  const preparedStatement = `%${q}%`;
+  const query = `SELECT * FROM ${db}.products WHERE name LIKE ?;`;
+  const productsByQuery = await connection.execute(query, [preparedStatement]);
+  if (productsByQuery) {
+    return camelize(productsByQuery[0]);
+  }
+};
+
 const insert = async (data) => {
   const columns = formattedColumns(data);
   const placeholder = formattedPlaceholders(data);
@@ -46,4 +56,5 @@ module.exports = {
   insert,
   update,
   deleteById,
+  findByQuery,
 };

@@ -1,7 +1,7 @@
 const chai = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
-const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError, insertInvalidNameFromServiveError, updatedProduct, updatedProductFromController, successDeletedProduct } = require('../mocks/products.mock');
+const { allProductsFromController, productIdFromController, productIdFromControllerError, newProduct, insertProductFromService, insertProductFromServiceError, insertInvalidNameFromServiveError, updatedProduct, updatedProductFromController, successDeletedProduct, searchQueryFromController, failToConnect } = require('../mocks/products.mock');
 const { productsService } = require('../../../src/services');
 const { productsController } = require('../../../src/controllers');
 
@@ -86,6 +86,48 @@ describe('Realize testes unitários para productsControler', function () {
 
     expect(response.status).to.have.been.calledWith(422);
     expect(response.json).to.have.been.calledWith({ message: insertInvalidNameFromServiveError.message });
+  });
+
+  it('Verifica o retorno do metodo searchProductByQuery com um query válida', async function () {
+    sinon.stub(productsService, 'findByQuery').resolves(searchQueryFromController);
+    const request = {
+      query: {
+        q: 'Martelo',
+      },
+    };
+
+    await productsController.searchProductByQuery(request, response);
+
+    expect(response.status).to.have.been.calledWith(200);
+    expect(response.json).to.have.been.calledWith(searchQueryFromController.data);
+  });
+
+  it('Verifica o retorno do metodo searchProductByQuery com um query válida nula', async function () {
+    sinon.stub(productsService, 'findByQuery').resolves(allProductsFromController);
+    const request = {
+      query: {
+        q: '',
+      },
+    };
+
+    await productsController.searchProductByQuery(request, response);
+
+    expect(response.status).to.have.been.calledWith(200);
+    expect(response.json).to.have.been.calledWith(allProductsFromController.data);
+  });
+
+  it('Verifica o retorno do metodo searchProductByQuery quando ocorre um erro interno', async function () {
+    sinon.stub(productsService, 'findByQuery').resolves(failToConnect);
+    const request = {
+      query: {
+        q: 'Martelo',
+      },
+    };
+
+    await productsController.searchProductByQuery(request, response);
+
+    expect(response.status).to.have.been.calledWith(500);
+    expect(response.json).to.have.been.calledWith({ message: 'Internal Server Error' });
   });
 
   it('Verifica todos os retornos inválidos do método updateProduct: name is required', async function () {

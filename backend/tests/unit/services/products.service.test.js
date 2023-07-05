@@ -52,6 +52,25 @@ describe('Realize testes unitários para productsService', function () {
     expect(response.message).to.be.deep.equal('Product not found');
   });
 
+  it('Verifica se é possível fazer uma busca com uma query com válida', async function () {
+    sinon.stub(productsModel, 'findByQuery').resolves([product01]);
+    const response = await productsService.findByQuery('martelo');
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('SUCCESSFUL');
+    expect(response.data).to.be.deep.equal([product01]);
+  });
+
+  it('Verifica o retorno da busca com query caso ocorra erro no servidor', async function () {
+    sinon.stub(productsModel, 'findByQuery').resolves(undefined);
+
+    const response = await productsService.findByQuery('martelo');
+    
+    expect(response).to.be.an('object');
+    expect(response.status).to.be.equal('FAIL');
+    expect(response.message).to.be.deep.equal('Internal Server Error');
+  });
+
   it('Verifica o retorno do método insert com dados válidos', async function () {
     const { insertId: id } = insertProductResponse[0];
     const responseBody = { id, ...newProduct };

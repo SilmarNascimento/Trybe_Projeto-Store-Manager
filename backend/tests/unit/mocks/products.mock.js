@@ -54,6 +54,11 @@ const productIdFromController = {
   data: product01,
 };
 
+const searchQueryFromController = {
+  status: 'SUCCESSFUL',
+  data: [product01],
+};
+
 const updatedProductFromController = {
   status: 'SUCCESSFUL',
   data: updatedProduct,
@@ -83,6 +88,8 @@ const insertInvalidNameFromServiveError = {
   message: '"name" length must be at least 5 characters long',
 };
 
+const failToConnect = { status: 'FAIL', message: 'Internal Server Error' };
+
 module.exports = {
   allProducts,
   product01,
@@ -95,10 +102,12 @@ module.exports = {
   newProduct,
   allProductsFromController,
   productIdFromController,
+  searchQueryFromController,
   updatedProductFromController,
   successDeletedProduct,
   productIdFromControllerError,
   insertProductFromService,
   insertProductFromServiceError,
   insertInvalidNameFromServiveError,
+  failToConnect,
 };

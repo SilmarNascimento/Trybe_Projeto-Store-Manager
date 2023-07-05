@@ -15,6 +15,16 @@ const getProductById = async (request, response, _next) => {
   return response.status(mapStatus(status)).json(data);
 };
 
+const searchProductByQuery = async (request, response, _next) => {
+  const { q: query } = request.query;
+  console.log(query);
+  const { status, data, message } = await productsService.findByQuery(query);
+  if (!data) {
+    return response.status(mapStatus(status)).json({ message });
+  }
+  return response.status(mapStatus(status)).json(data);
+};
+
 const addProduct = async (request, response, _next) => {
   const newProduct = request.body;
   const { status, data, message } = await productsService.insert(newProduct);
@@ -46,6 +56,7 @@ const deleteProduct = async (request, response, _next) => {
 module.exports = {
   getAllProducts,
   getProductById,
+  searchProductByQuery,
   addProduct,
   updateProduct,
   deleteProduct,

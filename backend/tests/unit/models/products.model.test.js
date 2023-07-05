@@ -33,6 +33,37 @@ describe('Realiza testes unitários para productsModel', function () {
     expect(response).to.be.deep.equal(product01);
   });
 
+  it('verifica o retorno do método findByQuery: query nula', async function () {
+    sinon.stub(connection, 'execute').resolves([allProducts]);
+    const response = await productsModel.findByQuery();
+    
+    expect(response).to.be.an('array');
+    expect(response).to.be.deep.equal(allProducts);
+  });
+
+  it('verifica o retorno do método findByQuery: query "MART"', async function () {
+    sinon.stub(connection, 'execute').resolves([[product01]]);
+    const response = await productsModel.findByQuery();
+    
+    expect(response).to.be.an('array');
+    expect(response).to.be.deep.equal([product01]);
+  });
+
+  it('verifica o retorno do método findByQuery: query de um produto inexistente', async function () {
+    sinon.stub(connection, 'execute').resolves([[]]);
+    const response = await productsModel.findByQuery('onion');
+    
+    expect(response).to.be.an('array');
+    expect(response).to.be.deep.equal([]);
+  });
+
+  it('verifica o retorno do método findByQuery: erro interno', async function () {
+    sinon.stub(connection, 'execute').resolves(undefined);
+    const response = await productsModel.findByQuery('martelo');
+    
+    expect(response).to.be.equal(undefined);
+  });
+
   it('Verifica se o método insert retorna o valor esperado', async function () {
     sinon.stub(connection, 'execute').resolves(insertProductResponse);
 
